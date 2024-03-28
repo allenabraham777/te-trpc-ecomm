@@ -9,6 +9,7 @@ export default {
             ...colors,
             alternative: '#333333',
             banner: '#F4F4F4',
+            border: '#C1C1C1',
         },
         extend: {
             fontFamily: {
