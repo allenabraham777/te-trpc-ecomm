@@ -4,16 +4,11 @@ import Input from '@/components/atoms/input';
 import Link from 'next/link';
 import React, { useCallback, useRef } from 'react';
 
-type Props = {
-    onSubmit: (email: string, password: string) => void;
-};
-
-const LoginPage = ({ onSubmit }: Props) => {
+const LoginPage = () => {
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const handleSubmit = useCallback(() => {
         if (!emailRef.current || !passwordRef.current) return;
-        onSubmit(emailRef.current.value, passwordRef.current.value);
     }, [emailRef, passwordRef]);
     return (
         <div className="flex flex-col gap-6">
