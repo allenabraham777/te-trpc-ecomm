@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Search from '@/app/_components/icons/search.svg';
-import Cart from '@/app/_components/icons/cart.svg';
-import ChevronLeft from '@/app/_components/icons/chevron-left.svg';
-import ChevronRight from '@/app/_components/icons/chevron-right.svg';
+import Search from '@/components/icons/search.svg';
+import Cart from '@/components/icons/cart.svg';
+import ChevronLeft from '@/components/icons/chevron-left.svg';
+import ChevronRight from '@/components/icons/chevron-right.svg';
 
 const topbarItems = [
     { label: 'Help', link: '' },

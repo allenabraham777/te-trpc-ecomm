@@ -1,30 +1,42 @@
-import Button from '@/app/_components/atoms/button';
-import Input from '@/app/_components/atoms/input';
-import Link from 'next/link';
-import React from 'react';
+'use client';
+import React, { useCallback, useState } from 'react';
+import RegisterForm from './_components/register-form';
+import VerifyBox from './_components/verify-box';
+import { emailStringMasker } from '@/utils/email';
+import { useRouter } from 'next/navigation';
+
+const SCREENS = {
+    REGISTER: 'REGISTER',
+    VERIFY: 'VERIFY',
+};
 
 const LoginPage = () => {
-    return (
-        <div className="flex flex-col gap-6 px-14 py-8">
-            <h1 className="w-full text-center text-[2rem] font-semibold">
-                Create your account
-            </h1>
-            <Input label="Name" placeholder="Enter your name" />
-            <Input label="Email" placeholder="user@example.com" />
-            <Input label="Password" type="password" placeholder="Password" />
-            <div className="w-full py-4">
-                <Button className="w-full">CREATE ACCOUNT</Button>
-            </div>
-            <div className="flex items-center justify-center gap-3 pb-20">
-                <h3 className="text-base font-normal text-alternative">
-                    Have an Account?
-                </h3>
-                <Link href="/login" className="font-medium uppercase">
-                    LOGIN
-                </Link>
-            </div>
-        </div>
+    const router = useRouter();
+    const [screen, setScreen] = useState(SCREENS.REGISTER);
+    const [email, setEmail] = useState('');
+    const createUser = useCallback(
+        (name: string, email: string, password: string) => {
+            console.log(name, email, password);
+            const maskedEmail = emailStringMasker(email);
+            setEmail(maskedEmail);
+            setScreen(SCREENS.VERIFY);
+        },
+        [],
     );
+    const verifyOtp = useCallback((otp: string) => {
+        router.push('/');
+    }, []);
+    switch (screen) {
+        case SCREENS.REGISTER: {
+            return <RegisterForm onSubmit={createUser} />;
+        }
+        case SCREENS.VERIFY: {
+            return <VerifyBox email={email} onSubmit={verifyOtp} />;
+        }
+        default: {
+            return null;
+        }
+    }
 };
 
 export default LoginPage;
