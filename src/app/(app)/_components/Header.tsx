@@ -31,13 +31,13 @@ const Header = () => {
                     ))}
                 </ul>
             </div>
-            <div className="grid h-16 grid-cols-3">
+            <div className="grid h-16 grid-cols-4">
                 <div className="px-8 py-2">
                     <h1 className="text-[2rem] font-bold uppercase leading-[2.42rem]">
                         ECOMMERCE
                     </h1>
                 </div>
-                <nav className="flex items-center justify-center">
+                <nav className="col-span-2 flex items-center justify-center">
                     <ul className="my-auto flex items-center justify-center gap-8">
                         {menubarItems.map((item) => (
                             <li
