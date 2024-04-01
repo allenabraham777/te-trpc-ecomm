@@ -3,6 +3,7 @@ import Checkbox from '@/components/atoms/checkbox';
 import Pagination from '@/components/molecules/pagination';
 import { api } from '@/trpc/react';
 import React, { useState } from 'react';
+import LoaderIcon from '@/components/icons/loading.svg';
 
 const page = 6;
 
@@ -45,6 +46,9 @@ const CategoriesPage = () => {
             </h4>
             <div className="mt-4 flex flex-col gap-6">
                 <h3 className="text-xl font-medium">My saved interests!</h3>
+                {categories.isLoading && (
+                    <LoaderIcon className="h-10 w-auto animate-spin" />
+                )}
                 {categories.data?.categories.map((category) => {
                     const checked = !!selectedCategories.data?.categories.some(
                         (x) => x.categoryId === category.id,

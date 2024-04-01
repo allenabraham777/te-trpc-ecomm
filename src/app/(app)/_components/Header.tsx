@@ -1,11 +1,11 @@
+'use client';
 import React from 'react';
 
 import Search from '@/components/icons/search.svg';
 import Cart from '@/components/icons/cart.svg';
 import ChevronLeft from '@/components/icons/chevron-left.svg';
 import ChevronRight from '@/components/icons/chevron-right.svg';
-import { api } from '@/trpc/server';
-import { error } from 'console';
+import { api } from '@/trpc/react';
 
 const topbarItems = [
     { label: 'Help', link: '' },
@@ -20,8 +20,19 @@ const menubarItems = [
     { label: 'Trending', link: '' },
 ];
 
-const Header = async () => {
-    const user = await api.user.getUserDetails().catch(() => null);
+const Header = () => {
+    const utils = api.useUtils();
+    const user = api.user.getUserDetails.useQuery();
+    const logoutUser = api.user.logoutUser.useMutation({
+        async onSuccess() {
+            utils.user.getUserDetails
+                .refetch()
+                .then(() => {
+                    location.href = '/login';
+                })
+                .catch((error: unknown) => console.error(error));
+        },
+    });
     return (
         <header>
             <div className="flex h-9 items-center justify-end">
@@ -31,7 +42,17 @@ const Header = async () => {
                             {item.label}
                         </li>
                     ))}
-                    {user?.name && <li className="text-xs">Hi, {user.name}</li>}
+                    {user.data?.name && (
+                        <>
+                            <li className="text-xs">Hi, {user.data.name}</li>
+                            <li
+                                className="cursor-pointer text-xs"
+                                onClick={() => logoutUser.mutate()}
+                            >
+                                Logout
+                            </li>
+                        </>
+                    )}
                 </ul>
             </div>
             <div className="grid h-16 grid-cols-4">

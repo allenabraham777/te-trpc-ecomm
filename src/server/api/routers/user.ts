@@ -120,6 +120,10 @@ export const userRouter = createTRPCRouter({
                 throw error;
             }
         }),
+    logoutUser: publicProcedure.mutation(async () => {
+        cookies().delete('token');
+        return { message: 'Logout successful' };
+    }),
     getUserDetails: protectedProcedure.query(async ({ ctx }) => {
         const user = (await ctx.db.user.findUnique({
             where: { id: ctx.user!.id },
