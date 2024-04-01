@@ -35,4 +35,5 @@ model UserCategories {
   user      User     @relation(fields: [userId], references: [id])
   category   Category  @relation(fields: [categoryId], references: [id])
   @@unique([userId, categoryId])
+  @@index(fields: [userId, categoryId])
 }
