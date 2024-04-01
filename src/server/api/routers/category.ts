@@ -3,21 +3,38 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
 import { TRPCError } from '@trpc/server';
 
 export const categoryRouter = createTRPCRouter({
-    getAllCategories: protectedProcedure.query(async ({ ctx }) => {
-        try {
-            const categories = await ctx.db.category.findMany();
-            return {
-                message: 'Categories',
-                categories,
-            };
-        } catch (error) {
-            console.error(error);
-            throw new TRPCError({
-                code: 'INTERNAL_SERVER_ERROR',
-                message: 'Something went wrong!',
-            });
-        }
-    }),
+    getAllCategories: protectedProcedure
+        .input(
+            z.object({
+                skip: z.number().optional(),
+                page: z.number().optional(),
+            }),
+        )
+        .query(async ({ ctx, input }) => {
+            try {
+                const { skip, page } = input;
+                let payload: { skip: number; take: number } | undefined =
+                    undefined;
+                if (page && skip !== undefined && skip > -1) {
+                    payload = { skip, take: page };
+                }
+                const categories = await ctx.db.$transaction([
+                    ctx.db.category.count(),
+                    ctx.db.category.findMany(payload),
+                ]);
+                return {
+                    message: 'Categories',
+                    categories: categories[1],
+                    total: categories[0],
+                };
+            } catch (error) {
+                console.error(error);
+                throw new TRPCError({
+                    code: 'INTERNAL_SERVER_ERROR',
+                    message: 'Something went wrong!',
+                });
+            }
+        }),
     getSelectedCategories: protectedProcedure.query(async ({ ctx }) => {
         try {
             const user = ctx.user!;
