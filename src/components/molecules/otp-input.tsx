@@ -13,7 +13,7 @@ export interface OTPInputProps {
     length?: number;
     isNumberInput?: boolean;
     disabled?: boolean;
-    onChange?: (otp: string) => any;
+    onChange?: (otp: string) => void;
 }
 
 interface BaseInputProps extends InputProps {
@@ -57,7 +57,7 @@ const OTPInputComponent = ({
 
     const getRightValue = useCallback(
         (str: string) => {
-            let changedValue = str;
+            const changedValue = str;
             if (!isNumberInput) {
                 return changedValue;
             }
@@ -69,7 +69,7 @@ const OTPInputComponent = ({
     const changeCodeAtFocus = useCallback(
         (str: string) => {
             const updatedOTPValues = [...otpValues];
-            updatedOTPValues[activeInput] = str[0] || '';
+            updatedOTPValues[activeInput] = str[0] ?? '';
             setOTPValues(updatedOTPValues);
             handleOtpChange(updatedOTPValues);
         },
@@ -170,7 +170,7 @@ const OTPInputComponent = ({
                 updatedOTPValues.forEach((val, index) => {
                     if (index >= activeInput) {
                         const changedValue = getRightValue(
-                            pastedData.shift() || val,
+                            pastedData.shift() ?? val,
                         );
                         if (changedValue) {
                             updatedOTPValues[index] = changedValue;

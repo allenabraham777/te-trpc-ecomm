@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { type PrismaClient } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
@@ -31,10 +31,10 @@ export const deserializeUser = async (db: PrismaClient) => {
             id: user.id,
             email: user.email,
         };
-    } catch (error: any) {
+    } catch (error: unknown) {
         throw new TRPCError({
             code: 'INTERNAL_SERVER_ERROR',
-            message: error.message,
+            message: (error as { message: string }).message,
         });
     }
 };

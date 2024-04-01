@@ -20,7 +20,7 @@ function RegisterForm({ onSubmit }: Props) {
             emailRef.current.value,
             passwordRef.current.value,
         );
-    }, [nameRef, emailRef, passwordRef]);
+    }, [nameRef, emailRef, passwordRef, onSubmit]);
     return (
         <div className="flex flex-col gap-6">
             <h1 className="w-full text-center text-[2rem] font-semibold">

@@ -7,7 +7,7 @@ type AuthLayoutProps = {
     children: React.ReactNode;
 };
 
-const AuthLayout: React.FC<AuthLayoutProps> = async ({ children }) => {
+const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
     const router = useRouter();
     const { data, isFetched } = api.user.getUserDetails.useQuery();
     if (isFetched && data?.id) {

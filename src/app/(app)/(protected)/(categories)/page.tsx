@@ -4,7 +4,7 @@ import Pagination from '@/components/molecules/pagination';
 import React, { useState } from 'react';
 
 const CategoriesPage = () => {
-    const [current, setCurrent] = useState<string | number>(1);
+    const [current, setCurrent] = useState<number>(1);
     return (
         <div className="flex flex-col gap-4">
             <h1 className="text-center text-[2rem] font-semibold">

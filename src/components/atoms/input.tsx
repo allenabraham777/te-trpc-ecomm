@@ -12,7 +12,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         const [localType, setLocalType] = useState(type);
         const switchType = useCallback(() => {
             setLocalType((type) => (type === 'password' ? 'text' : 'password'));
-        }, [localType]);
+        }, []);
         return (
             <div className="relative flex flex-col gap-2">
                 {label && <label className="text-base">{label}</label>}
@@ -38,5 +38,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         );
     },
 );
+
+Input.displayName = 'Input';
 
 export default Input;

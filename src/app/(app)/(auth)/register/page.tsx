@@ -40,7 +40,7 @@ const LoginPage = () => {
         (otp: string) => {
             verifyOtpApi.mutate({ email, otp });
         },
-        [verifyOtpApi],
+        [verifyOtpApi, email],
     );
     switch (screen) {
         case SCREENS.REGISTER: {

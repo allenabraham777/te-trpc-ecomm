@@ -58,7 +58,7 @@ export const userRouter = createTRPCRouter({
                 const user = await ctx.db.user.findFirst({
                     where: { email, verified: false },
                 });
-                if (!user || !user.otp) {
+                if (!user?.otp) {
                     throw new Error('Invalid email or otp');
                 }
                 const isValidOtp = await bcrypt.compare(otp, user.otp);

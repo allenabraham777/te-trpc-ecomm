@@ -14,7 +14,7 @@ const VerifyBox = ({ email, onSubmit }: Props) => {
     }, []);
     const handleSubmit = useCallback(() => {
         onSubmit(otp);
-    }, [otp]);
+    }, [otp, onSubmit]);
     return (
         <div className="flex flex-col gap-6">
             <h1 className="w-full text-center text-[2rem] font-semibold">

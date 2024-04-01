@@ -1,9 +1,10 @@
 import clsx from 'clsx';
 import React from 'react';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
-
-const Button = ({ className, ...props }: ButtonProps) => {
+const Button = ({
+    className,
+    ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
     return (
         <button
             {...props}

@@ -23,7 +23,7 @@ const LoginPage = () => {
             email: emailRef.current.value,
             password: passwordRef.current.value,
         });
-    }, [emailRef, passwordRef]);
+    }, [emailRef, passwordRef, loginUserApi]);
     return (
         <div className="flex flex-col gap-6">
             <h1 className="w-full text-center text-[2rem] font-semibold">
@@ -53,7 +53,7 @@ const LoginPage = () => {
             </div>
             <div className="border-1 flex items-center justify-center gap-3 border-t border-border pb-4 pt-4">
                 <h3 className="text-base font-normal text-alternative">
-                    Don't have an Account?
+                    Don&lsquo;t have an Account?
                 </h3>
                 <Link href="/register" className="font-medium uppercase">
                     SIGN UP

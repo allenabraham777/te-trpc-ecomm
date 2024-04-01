@@ -8,8 +8,11 @@ export const getUser = async ({
 }: { shouldRedirect?: boolean } = {}) => {
     try {
         return await api.user.getUserDetails();
-    } catch (error: any) {
-        if (error?.code === 'UNAUTHORIZED' && shouldRedirect) {
+    } catch (error: unknown) {
+        if (
+            (error as { code: string })?.code === 'UNAUTHORIZED' &&
+            shouldRedirect
+        ) {
             redirect('/login');
         }
         return null;

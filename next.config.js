@@ -7,6 +7,7 @@ await import('./src/env.js');
 /** @type {import("next").NextConfig} */
 const config = {
     webpack(config) {
+        // @ts-ignore
         const fileLoaderRule = config.module.rules.find((rule) =>
             rule.test?.test?.('.svg'),
         );

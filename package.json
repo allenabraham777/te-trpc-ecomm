@@ -10,8 +10,8 @@
         "dev": "next dev",
         "postinstall": "prisma generate",
         "lint": "next lint",
-        "prettier": "prettier --check",
-        "prettier:fix": "prettier --write --list-different .",
+        "format": "prettier --check .",
+        "format:fix": "prettier --write --list-different .",
         "start": "next start"
     },
     "dependencies": {

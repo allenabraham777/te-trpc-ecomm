@@ -9,7 +9,7 @@ type ProtectedLayoutProps = {
 const ProtectedLayout = async ({ children }: ProtectedLayoutProps) => {
     try {
         await api.user.getUserDetails();
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error(error);
         redirect('/login');
     }

@@ -11,7 +11,7 @@ interface UsePaginationProps {
 }
 
 const range = (start: number, end: number) => {
-    let length = end - start + 1;
+    const length = end - start + 1;
     return Array.from({ length }, (_, i) => i + start);
 };
 
@@ -39,7 +39,7 @@ const usePagination = ({ total, page, current }: UsePaginationProps) => {
         }
 
         if (showLeftDots && showRightDots) {
-            let midRange = range(leftIndex, rightIndex);
+            const midRange = range(leftIndex, rightIndex);
             return [1, DOTS, ...midRange, DOTS, totalPages];
         }
         return [];
