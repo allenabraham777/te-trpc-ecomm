@@ -1,7 +1,12 @@
 import { z } from 'zod';
 import * as bcrypt from 'bcrypt';
-
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
+import jwt from 'jsonwebtoken';
+import {
+    createTRPCRouter,
+    protectedProcedure,
+    publicProcedure,
+} from '@/server/api/trpc';
+import { cookies } from 'next/headers';
 
 export const userRouter = createTRPCRouter({
     register: publicProcedure
@@ -24,7 +29,7 @@ export const userRouter = createTRPCRouter({
                 const otp = '12345678'; // TODO: Generate random otp
                 const hashedOtp = await bcrypt.hash(otp, 10);
                 const hashedPassword = await bcrypt.hash(password, 10);
-                await ctx.db.user.create({
+                const user = await ctx.db.user.create({
                     data: {
                         name,
                         email,
@@ -36,6 +41,9 @@ export const userRouter = createTRPCRouter({
                 return {
                     message:
                         'Registration successful. Please check your email for OTP.',
+                    email: user.email,
+                    name: user.name,
+                    id: user.id,
                 };
             } catch (error) {
                 console.error('Error registering user:', error);
@@ -53,7 +61,7 @@ export const userRouter = createTRPCRouter({
                 if (!user || !user.otp) {
                     throw new Error('Invalid email or otp');
                 }
-                const isValidOtp = bcrypt.compare(otp, user.otp);
+                const isValidOtp = await bcrypt.compare(otp, user.otp);
                 if (!isValidOtp) {
                     throw new Error('Invalid email or otp');
                 }
@@ -72,7 +80,7 @@ export const userRouter = createTRPCRouter({
         }),
     login: publicProcedure
         .input(z.object({ email: z.string(), password: z.string() }))
-        .query(async ({ ctx, input }) => {
+        .mutation(async ({ ctx, input }) => {
             const { email, password } = input;
             try {
                 const user = await ctx.db.user.findFirst({ where: { email } });
@@ -86,14 +94,40 @@ export const userRouter = createTRPCRouter({
                         token: null,
                     };
                 }
-                const isValidPassword = bcrypt.compare(password, user.password);
+                const isValidPassword = await bcrypt.compare(
+                    password,
+                    user.password,
+                );
                 if (!isValidPassword) {
                     throw new Error('invalid email or password');
                 }
-                const token = 'abcd'; //TODO: Generate token
+                const secret = process.env.JWT_SECRET!;
+                const token = jwt.sign(
+                    { id: user.id, email: user.email },
+                    secret,
+                );
+                const cookieOptions = {
+                    httpOnly: true,
+                    path: '/',
+                    secure: process.env.NODE_ENV !== 'development',
+                    maxAge: 60 * 60,
+                };
+
+                cookies().set('token', token, cookieOptions);
                 return { message: 'Login successful', verified: true, token };
             } catch (error) {
                 console.error('Error logging in user');
+                throw error;
             }
         }),
+    getUserDetails: protectedProcedure.query(async ({ ctx }) => {
+        const user = (await ctx.db.user.findUnique({
+            where: { id: ctx.user!.id },
+        }))!;
+        return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+        };
+    }),
 });

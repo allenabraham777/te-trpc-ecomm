@@ -1,14 +1,28 @@
 'use client';
 import Button from '@/components/atoms/button';
 import Input from '@/components/atoms/input';
+import { api } from '@/trpc/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useCallback, useRef } from 'react';
 
 const LoginPage = () => {
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
+    const router = useRouter();
+    const loginUserApi = api.user.login.useMutation({
+        onSuccess(data) {
+            if (data.token) {
+                router.push('/');
+            }
+        },
+    });
     const handleSubmit = useCallback(() => {
         if (!emailRef.current || !passwordRef.current) return;
+        loginUserApi.mutate({
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+        });
     }, [emailRef, passwordRef]);
     return (
         <div className="flex flex-col gap-6">
