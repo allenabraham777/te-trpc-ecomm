@@ -4,11 +4,12 @@ import Search from '@/components/icons/search.svg';
 import Cart from '@/components/icons/cart.svg';
 import ChevronLeft from '@/components/icons/chevron-left.svg';
 import ChevronRight from '@/components/icons/chevron-right.svg';
+import { api } from '@/trpc/server';
+import { error } from 'console';
 
 const topbarItems = [
     { label: 'Help', link: '' },
     { label: 'Orders & Returns', link: '' },
-    { label: 'Hi, John', link: '' },
 ];
 
 const menubarItems = [
@@ -19,7 +20,8 @@ const menubarItems = [
     { label: 'Trending', link: '' },
 ];
 
-const Header = () => {
+const Header = async () => {
+    const user = await api.user.getUserDetails().catch(() => null);
     return (
         <header>
             <div className="flex h-9 items-center justify-end">
@@ -29,6 +31,7 @@ const Header = () => {
                             {item.label}
                         </li>
                     ))}
+                    {user?.name && <li className="text-xs">Hi, {user.name}</li>}
                 </ul>
             </div>
             <div className="grid h-16 grid-cols-4">
